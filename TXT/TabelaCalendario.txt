@@ -1,0 +1,35 @@
+Tabela Calendário
+
+No Power Query, abrir NOVA FONTE > CONSULTA NULA.
+
+
+Na janela de fórmulas, colocar:
+
+	= List.Min(Base de Dados[Nome da coluna]) - Exibe o valor mínimo da coluna;
+	
+	= List.Max(Base de Dados[Nome da coluna]) - Exibe o valor máximo da coluna;
+
+	= Duration.Days(DataMax-DataMin)+1 - Exibe o total de dias entre as datas;
+
+	= List.Dates(DataMin,QtdDias, #duration( 1, 0, 0, 0)) - Cria uma lista com um dia em cada linha, dentro do período de datas da coluna Data da Venda. À partir da DataMin, percorre a QtdDias, pulando (#duration) de 1 em 1 dia.
+
+
+Código para criar a Tabela Calendário. Para funcionar, o nome da tabela de origem deve ser "BaseVendas" e deve conter a coluna "Data da Venda":
+
+let
+    DataMin = List.Min(BaseVendas[Data da Venda]),
+    DataMax = List.Max(BaseVendas[Data da Venda]),
+    QtdDias = Duration.Days(DataMax-DataMin)+1,
+    ListaDias = List.Dates(DataMin,QtdDias, #duration( 1, 0, 0, 0)),
+    #"Convertido para Tabela" = Table.FromList(ListaDias, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+    #"Tipo Alterado" = Table.TransformColumnTypes(#"Convertido para Tabela",{{"Column1", type date}}),
+    #"Colunas Renomeadas" = Table.RenameColumns(#"Tipo Alterado",{{"Column1", "Datas"}}),
+    #"Ano Inserido" = Table.AddColumn(#"Colunas Renomeadas", "Ano", each Date.Year([Datas]), Int64.Type),
+    #"Mês Inserido" = Table.AddColumn(#"Ano Inserido", "Mês", each Date.Month([Datas]), Int64.Type),
+    #"Nome do Mês Inserido" = Table.AddColumn(#"Mês Inserido", "Nome do Mês", each Date.MonthName([Datas]), type text),
+    #"Início do Mês Inserido" = Table.AddColumn(#"Nome do Mês Inserido", "Início do Mês", each Date.StartOfMonth([Datas]), type date),
+    #"Trimestre Inserido" = Table.AddColumn(#"Início do Mês Inserido", "Trimestre", each Date.QuarterOfYear([Datas]), Int64.Type),
+    #"Semana do Ano Inserida" = Table.AddColumn(#"Trimestre Inserido", "Semana do Ano", each Date.WeekOfYear([Datas]), Int64.Type)
+in
+    #"Semana do Ano Inserida"
+

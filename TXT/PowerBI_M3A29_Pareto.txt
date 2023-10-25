@@ -1,0 +1,15 @@
+Power BI M3 A29
+
+No Exemplo, temos um total de 18 marcas, dentre as quais 4 delas representam mais de 50% do faturamento total.
+Podemos exemplificar a regar de Pareto no exemplo da aula.
+
+Exemplo M3 A29: As 4 marcas que mais faturaram representam 22,222...% do total de marcas existentes no portfólio.
+
+Quantos porcento 4 é de 18?
+18 = 100
+4 = x
+Inversamente Proporcional:
+18x = 400 => x = 22,222...%
+
+Com ese exemplo, fica clara a importância da utilização da regra de Pareto na análise dos dados, fazendo uma comparação entre a quantidade de vendas versus os valores das vendas.
+Mais de 50% do faturamento é advindo de vendas de 22,222...% das marcas do portfólio da empresa.
